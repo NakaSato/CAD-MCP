@@ -181,6 +181,8 @@ npx -y @modelcontextprotocol/inspector python C:\\cad-mcp\\src\\server.py
 - `new_drawing` / `open_drawing` / `close_drawing` / `save_drawing`: จัดการแบบ
 - `create_block` / `insert_block` / `list_blocks`: ทำงานกับบล็อก
 - `send_command`: รันคำสั่ง CAD ใดก็ได้ผ่านบรรทัดคำสั่ง
+- `replace_text`: ค้นหาและแทนที่ข้อความทั้งแบบ (model, layout, block รวมกรอบชื่อแบบ, attribute) ใช้เติมค่าในเทมเพลต เช่น `{{SITE_NAME}}`
+- `plot_to_pdf`: พล็อตทุก layout ด้วยไดรเวอร์ DWG To PDF ของ CAD เองแล้วรวมเป็น PDF ไฟล์เดียว
 
 **อินเทอร์เฟซเดิม:**
 - `process_command`: ประมวลผลคำสั่งภาษาธรรมชาติ

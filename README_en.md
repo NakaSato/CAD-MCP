@@ -121,7 +121,35 @@ cad-mcp
 # Option 3: Run with Streamable HTTP transport (remote / multi-client sharing one CAD instance)
 python src/server.py --transport streamable-http --port 8000
 # Clients connect to http://127.0.0.1:8000/mcp
+
+# From another machine (e.g. Windows in a Parallels VM, client on the Mac):
+# listen on all interfaces and allow the address the client uses
+python src/server.py --transport streamable-http --host 0.0.0.0 --port 8000 --allow-host 10.211.55.3
 ```
+
+### Fake CAD Backend (macOS / Linux / no CAD installed)
+
+For development and testing without Windows or a CAD application, start the server with `--fake` (or set `CAD_MCP_FAKE=1`). It keeps the drawing in memory instead of driving real CAD over COM, so every tool can be called:
+
+```bash
+uv run python src/server.py --fake
+npx -y @modelcontextprotocol/inspector uv run --project /path/to/cad-mcp python /path/to/cad-mcp/src/server.py --fake
+```
+
+Limitations: `save_drawing` writes a JSON file that only the fake backend can open, `send_command` only understands `UNDO`/`REDO`/`ZOOM`/`REGEN`, polylines cannot be offset, and `screenshot` returns a rendered preview of the geometry rather than a real CAD window.
+
+### GstarCAD for Mac
+
+GstarCAD for Mac has no COM interface, so the server drives it through a script bridge: each tool call writes a CAD script (AutoLISP inside), pastes `_SCRIPT <path>` into GstarCAD's command line via macOS Accessibility, and reads the result file the script writes. A call takes about 2-4 seconds and brings GstarCAD to the front.
+
+```bash
+uv run python src/server.py --gcad-mac
+```
+
+- Give the app running the server (Terminal, Claude, ...) **Accessibility** permission (System Settings > Privacy & Security).
+- Start GstarCAD with a drawing open. **Do not type into GstarCAD while a call runs** - keys pressed meanwhile land in its command line.
+- Works with any keyboard input source (commands are pasted, not typed); the clipboard is restored after each call.
+- `replace_text` matches ASCII search strings only on Mac (placeholders); replacement text may be Thai/Chinese.
 
 ### Connect from an MCP Client
 
@@ -181,6 +209,8 @@ The server provides the following tools (35 in total):
 - `new_drawing` / `open_drawing` / `close_drawing` / `save_drawing`: Drawing management
 - `create_block` / `insert_block` / `list_blocks`: Block operations
 - `send_command`: Execute any CAD command via the command line
+- `replace_text`: Find and replace text everywhere (model, layouts, block definitions incl. title block, attributes) - fills template placeholders like `{{SITE_NAME}}`
+- `plot_to_pdf`: Plot every layout with the CAD's own DWG To PDF driver and merge into one PDF
 
 **Legacy:**
 - `process_command`: Process natural language commands

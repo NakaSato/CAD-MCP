@@ -181,6 +181,8 @@ npx -y @modelcontextprotocol/inspector python C:\\cad-mcp\\src\\server.py
 - `new_drawing` / `open_drawing` / `close_drawing` / `save_drawing`: 图纸管理
 - `create_block` / `insert_block` / `list_blocks`: 图块操作
 - `send_command`: 直通CAD命令行执行任意命令
+- `replace_text`: 全图查找替换文字（模型、布局、图块定义含标题栏、属性），用于填写模板占位符如 `{{SITE_NAME}}`
+- `plot_to_pdf`: 用CAD自身的 DWG To PDF 打印所有布局并合并为一个PDF
 
 **遗留接口：**
 - `process_command`: 处理自然语言命令

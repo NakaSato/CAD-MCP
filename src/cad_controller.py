@@ -18,13 +18,31 @@ except ImportError:
 
 config = get_config()
 
-try:
-    import win32com.client
-    # pythoncom是pywin32的一部分，不需要单独安装
-    import pythoncom
-except ImportError:
-    logging.error("无法导入win32com.client或pythoncom，请确保已安装pywin32库")
-    raise
+# 假CAD后端：CAD_MCP_FAKE=1（或 server.py --fake）时用内存模拟的COM对象模型，
+# 便于在 macOS/Linux 或未安装CAD的机器上启动服务器、调试工具
+FAKE_BACKEND = os.environ.get("CAD_MCP_FAKE", "").strip().lower() in ("1", "true", "yes", "on")
+# GstarCAD for Mac 后端（CAD_MCP_BACKEND=gcad-mac 或 server.py --gcad-mac）：不走COM，
+# 由 gcad_mac.GcadMacController 通过脚本桥驱动；这里仅需COM线程执行器用到的占位模块
+GCAD_MAC_BACKEND = os.environ.get("CAD_MCP_BACKEND", "").strip().lower() in ("gcad-mac", "gstarcad-mac")
+
+if FAKE_BACKEND or GCAD_MAC_BACKEND:
+    try:
+        from . import fake_cad
+    except ImportError:
+        import fake_cad
+    win32com = fake_cad.win32com
+    pythoncom = fake_cad.pythoncom
+    if FAKE_BACKEND:
+        logging.warning("已启用假CAD后端（CAD_MCP_FAKE），不会连接真实CAD")
+else:
+    try:
+        import win32com.client
+        # pythoncom是pywin32的一部分，不需要单独安装
+        import pythoncom
+    except ImportError:
+        logging.error("无法导入win32com.client或pythoncom，请确保已安装pywin32库"
+                      "（非Windows环境可设置 CAD_MCP_FAKE=1 使用假CAD后端）")
+        raise
 
 try:
     import anyio
@@ -1063,6 +1081,10 @@ class CADController:
         if not self.is_running():
             raise RuntimeError("CAD未运行")
 
+        if FAKE_BACKEND:
+            # 假后端没有真实窗口，按实体几何渲染示意图
+            return fake_cad.render_png(self.doc)
+
         import win32gui
         import win32con
         from PIL import ImageGrab
@@ -1408,6 +1430,83 @@ class CADController:
         except Exception as e:
             logger.error(f"列出图块失败: {str(e)}")
         return blocks
+
+    # ==================== 模板与出图 ====================
+
+    def replace_text(self, find: str, replace: str) -> int:
+        """全图替换文字：模型空间、图纸空间、所有图块定义（含标题栏）与块属性，返回修改数"""
+        if not self.is_running():
+            return 0
+        if not find:
+            return 0
+        count = 0
+
+        def fix(obj):
+            nonlocal count
+            s = self._safe_attr(obj, "TextString")
+            if isinstance(s, str) and find in s:
+                self._call(setattr, obj, "TextString", s.replace(find, replace))
+                count += 1
+
+        spaces = [self._ms(), self._safe_attr(self.doc, "PaperSpace")]
+        blocks = self._safe_attr(self.doc, "Blocks")
+        if blocks is not None:
+            for i in range(self._safe_attr(blocks, "Count", 0) or 0):
+                spaces.append(self._call_attr(blocks, "Item", i))
+        with self._undo_group():
+            for space in (sp for sp in spaces if sp is not None):
+                for i in range(self._safe_attr(space, "Count", 0) or 0):
+                    ent = self._call_attr(space, "Item", i)
+                    name = str(self._safe_attr(ent, "ObjectName", ""))
+                    if name in ("AcDbText", "AcDbMText", "AcDbAttributeDefinition"):
+                        fix(ent)
+                    elif name == "AcDbBlockReference" and self._safe_attr(ent, "HasAttributes", False):
+                        for att in (self._call_attr(ent, "GetAttributes") or ()):
+                            fix(att)
+        try:
+            self._call_attr(self.doc, "Regen", 1)
+        except Exception:
+            pass
+        return count
+
+    def plot_to_pdf(self, output_path: str, paper: str = "ISO full bleed A3 (420.00 x 297.00 MM)") -> Dict[str, Any]:
+        """逐个布局用 DWG To PDF 打印，再合并为一个PDF（合并需要 pypdf，否则保留单页文件）"""
+        if not self.is_running():
+            raise RuntimeError("CAD未运行")
+        out = os.path.abspath(output_path)
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        layouts = self._call(getattr, self.doc, "Layouts")
+        pages = []
+        for i in range(self._call(getattr, layouts, "Count")):
+            lay = self._call_attr(layouts, "Item", i)
+            if self._safe_attr(lay, "ModelType", False):
+                continue
+            pages.append((self._safe_attr(lay, "TabOrder", i), lay))
+        pages.sort(key=lambda t: t[0])
+        files = []
+        for n, (_, lay) in enumerate(pages):
+            self._call(setattr, self.doc, "ActiveLayout", lay)
+            self._call(setattr, lay, "ConfigName", "DWG To PDF.pc3")
+            try:
+                self._call(setattr, lay, "CanonicalMediaName", paper)
+            except Exception:
+                pass  # 媒体名不匹配时保留布局原有设置
+            page = f"{os.path.splitext(out)[0]}-{n + 1:02d}.pdf"
+            self._call_attr(self._call(getattr, self.doc, "Plot"), "PlotToFile", page)
+            if os.path.exists(page):
+                files.append(page)
+        try:
+            from pypdf import PdfWriter
+            w = PdfWriter()
+            for f in files:
+                w.append(f)
+            with open(out, "wb") as fh:
+                w.write(fh)
+            for f in files:
+                os.remove(f)
+        except ImportError:
+            out = os.path.dirname(out)
+        return {"pdf": out, "layouts": len(pages), "plotted": len(files)}
 
     # ==================== 命令直通 ====================
 

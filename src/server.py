@@ -10,6 +10,13 @@ from pydantic import Field
 
 sys.dont_write_bytecode = True
 
+# --fake / --gcad-mac 必须在导入 cad_controller 之前生效（它在导入时决定使用哪种后端）
+if "--fake" in sys.argv:
+    os.environ["CAD_MCP_FAKE"] = "1"
+if "--gcad-mac" in sys.argv:
+    os.environ["CAD_MCP_BACKEND"] = "gcad-mac"
+_GCAD_MAC = os.environ.get("CAD_MCP_BACKEND", "").strip().lower() in ("gcad-mac", "gstarcad-mac")
+
 # 兼容两种运行方式：
 # 1. 作为包导入（pip install 后，模块名为 src.server）
 # 2. 直接运行 src/server.py（保持旧的 Claude/Cursor 配置可用）
@@ -19,6 +26,8 @@ if __package__:
     from .models import (ToolResult, ListEntitiesResult,
                          ListLayersResult, EntityPropertiesResult, ListBlocksResult)
     from .nlp_processor import NLPProcessor
+    if _GCAD_MAC:
+        from .gcad_mac import GcadMacController as CADController  # noqa: F811
 else:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from cad_controller import CADController
@@ -26,6 +35,8 @@ else:
     from models import (ToolResult, ListEntitiesResult,
                         ListLayersResult, EntityPropertiesResult, ListBlocksResult)
     from nlp_processor import NLPProcessor
+    if _GCAD_MAC:
+        from gcad_mac import GcadMacController as CADController  # noqa: F811
 
 from mcp.server.fastmcp import FastMCP, Context
 from mcp.types import ToolAnnotations, ImageContent, TextContent
@@ -126,6 +137,10 @@ PROMPT_TEMPLATE = """
 "new_drawing" / "open_drawing" / "close_drawing" / "save_drawing": 图纸管理
 "create_block" / "insert_block" / "list_blocks": 图块操作
 "send_command": 直通CAD命令行执行任意命令
+
+模板与出图：
+"replace_text": 全图查找替换文字（含标题栏/图块/属性，用于填写模板占位符如 {{SITE_NAME}}）
+"plot_to_pdf": 用CAD打印所有布局并合并为一个PDF
 
 遗留接口：
 "process_command": 处理自然语言命令并转换为CAD操作（推荐优先使用上述结构化工具）
@@ -1021,6 +1036,45 @@ async def send_command(ctx: Context, command: str) -> ToolResult:
     return ToolResult(success=ok, message=f"命令已提交: {command}" if ok else "命令执行失败")
 
 
+# ---------- 模板与出图 ----------
+
+@mcp.tool(annotations=ToolAnnotations(destructiveHint=True))
+async def replace_text(ctx: Context, find: str, replace: str) -> ToolResult:
+    """在整张图纸中查找并替换文字：模型空间、所有布局、图块定义（含标题栏）及块属性
+
+    主要用于填写项目模板：模板中的占位符如 {{SITE_NAME}} 替换为实际值。
+    find 区分大小写；GstarCAD for Mac 后端下 find 仅支持 ASCII（如占位符），replace 可含中文/泰文。
+    """
+    if not await _ensure_running(ctx):
+        return ToolResult(success=False, message="CAD未运行且自动启动失败")
+    try:
+        n = await com(cad_service.controller.replace_text, find, replace)
+    except Exception as e:
+        logger.error(f"替换文字失败: {e}")
+        return ToolResult(success=False, message="替换文字失败", error=str(e))
+    return ToolResult(success=n > 0, message=f"已替换 {n} 处文字对象: {find} -> {replace}" if n else f"未找到: {find}")
+
+
+@mcp.tool()
+async def plot_to_pdf(ctx: Context, output_path: str,
+                      paper: str = "ISO full bleed A3 (420.00 x 297.00 MM)") -> ToolResult:
+    """用CAD自身打印（DWG To PDF）输出当前图纸的所有布局，合并为一个PDF
+
+    output_path 为生成的PDF路径；paper 为打印机支持的图纸尺寸名称（默认A3无边距）。
+    """
+    if not await _ensure_running(ctx):
+        return ToolResult(success=False, message="CAD未运行且自动启动失败")
+    await ctx.info("正在打印所有布局为PDF（每个布局约数秒）...")
+    try:
+        info = await com(cad_service.controller.plot_to_pdf, output_path, paper)
+    except Exception as e:
+        logger.error(f"打印PDF失败: {e}")
+        return ToolResult(success=False, message="打印PDF失败", error=str(e))
+    ok = info.get("plotted", 0) > 0
+    return ToolResult(success=ok, message=f"已打印 {info.get('plotted')}/{info.get('layouts')} 个布局到 {info.get('pdf')}"
+                      if ok else "未生成任何PDF页面")
+
+
 # ---------- 图块操作 ----------
 
 @mcp.tool()
@@ -1104,6 +1158,36 @@ def cad_assistant() -> str:
 
 # ==================== 主入口 ====================
 
+def _configure_host_check(host: str, allow_hosts: list) -> None:
+    """按监听地址调整DNS重绑定防护（Host头校验）
+
+    FastMCP在构造时按默认地址127.0.0.1开启防护，只放行localhost；
+    之后改为监听0.0.0.0/局域网IP并不会放宽，导致从宿主机（如Parallels
+    虚拟机外的Mac）访问时被拒绝（HTTP 421）。这里按实际监听地址重新配置：
+    仅本机监听保持原样；指定了 --allow-host 或具体IP时只放行这些主机；
+    监听0.0.0.0且未指定时关闭校验并提示（仅适合可信的局域网/虚拟机网络）。
+    """
+    from mcp.server.transport_security import TransportSecuritySettings
+    loopback = ["127.0.0.1", "localhost", "::1"]
+    if host in loopback and not allow_hosts:
+        return
+    names = list(allow_hosts)
+    if host not in loopback + ["0.0.0.0", "::"]:
+        names.append(host)
+    if not names:
+        logger.warning("监听 %s 且未指定 --allow-host：已关闭Host头校验，请仅在可信网络（如虚拟机内网）中使用", host)
+        mcp.settings.transport_security = TransportSecuritySettings(enable_dns_rebinding_protection=False)
+        return
+    hosts = names + loopback
+    fmt = lambda h: f"[{h}]" if ":" in h else h
+    mcp.settings.transport_security = TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=[f"{fmt(h)}:*" for h in hosts] + [fmt(h) for h in hosts],
+        allowed_origins=[f"http://{fmt(h)}:*" for h in hosts],
+    )
+    logger.info("允许访问的主机: %s", ", ".join(hosts))
+
+
 def main():
     """主入口：支持 stdio（默认）与 streamable-http 两种传输方式"""
     parser = argparse.ArgumentParser(description="CAD MCP 服务器")
@@ -1111,6 +1195,12 @@ def main():
                         help="传输方式（默认读取config.json，未配置则为stdio）")
     parser.add_argument("--host", default=None, help="Streamable HTTP 监听地址")
     parser.add_argument("--port", type=int, default=None, help="Streamable HTTP 监听端口")
+    parser.add_argument("--fake", action="store_true",
+                        help="使用内存模拟的假CAD后端（无需Windows/CAD，用于开发调试）")
+    parser.add_argument("--gcad-mac", action="store_true",
+                        help="驱动 GstarCAD for Mac（脚本桥，需辅助功能权限）")
+    parser.add_argument("--allow-host", action="append", default=[], metavar="HOST",
+                        help="允许客户端访问的主机名/IP（可多次指定，如虚拟机IP 10.211.55.3）")
     args = parser.parse_args()
 
     server_cfg = config.get("server", {})
@@ -1122,6 +1212,7 @@ def main():
         # Streamable HTTP 传输：支持远程/多客户端共享同一CAD实例
         mcp.settings.host = host
         mcp.settings.port = port
+        _configure_host_check(host, args.allow_host)
         logger.info(f"服务器以 Streamable HTTP 传输运行: http://{host}:{port}/mcp")
         mcp.run(transport="streamable-http")
     else:
