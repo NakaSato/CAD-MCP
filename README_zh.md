@@ -151,7 +151,7 @@ npx -y @modelcontextprotocol/inspector python C:\\cad-mcp\\src\\server.py
 
 ### 服务API
 
-服务器提供以下工具（共35个）：
+服务器提供以下工具（共37个）：
 
 **基本绘图：**
 - `draw_line`: 绘制直线

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-An MCP server (Python, FastMCP) that drives AutoCAD / GstarCAD (GCAD) / ZWCAD on **Windows** through COM (`pywin32`). It exposes 35 tools (draw, query, edit, layers, drawings, blocks, `send_command` passthrough) plus a `drawing://current` resource and a `cad-assistant` prompt. Code comments, log messages, and tool docstrings are in Chinese; keep that convention when editing existing code.
+An MCP server (Python, FastMCP) that drives AutoCAD / GstarCAD (GCAD) / ZWCAD on **Windows** through COM (`pywin32`). It exposes 37 tools (draw, query, edit, layers, drawings, blocks, `send_command` passthrough) plus a `drawing://current` resource and a `cad-assistant` prompt. Code comments, log messages, and tool docstrings are in Chinese; keep that convention when editing existing code.
 
 ## Commands
 

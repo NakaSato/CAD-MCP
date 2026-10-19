@@ -6,7 +6,7 @@
 
 CAD-MCP is an innovative CAD control service that allows controlling CAD software for drawing operations through natural language instructions. This project combines natural language processing and CAD automation technology, enabling users to create and modify CAD drawings through simple text commands without manually operating the CAD interface.
 
-Version 2.0 is fully upgraded based on the latest MCP specification (FastMCP, structured output, tool annotations, progress notifications, Streamable HTTP), and adds 35 tools in total covering querying, editing, layers, drawing management, blocks, and command passthrough — forming a complete "draw → inspect → correct" feedback loop.
+Version 2.0 is fully upgraded based on the latest MCP specification (FastMCP, structured output, tool annotations, progress notifications, Streamable HTTP), and adds 37 tools in total covering querying, editing, layers, drawing management, blocks, and command passthrough — forming a complete "draw → inspect → correct" feedback loop.
 
 ## Features
 
