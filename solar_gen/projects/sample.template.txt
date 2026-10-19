@@ -1,0 +1,37 @@
+# PEA solar-rooftop template - project values (sample, fictional)
+# Run:  uv run solar_gen/fill_template.py solar_gen/projects/sample.template.txt
+# Format: KEY = value   (one per line, UTF-8, Thai OK, # starts a comment)
+
+TEMPLATE = PEA-solar-template.dwg
+OUTPUT_NAME = SAMPLE-WTP-FULL
+
+# ชื่อสถานที่/โครงการ (site name) - appears in sheet titles, title block, cover
+SITE_NAME = สถานีผลิตน้ำตัวอย่าง การประปาส่วนภูมิภาคสาขาตัวอย่าง
+
+# ที่อยู่ (address line under the project name in the title block)
+SITE_ADDRESS = ต.ตัวอย่าง อ.เมืองตัวอย่าง จ.ตัวอย่าง 10000
+
+# LAT, LONG
+GPS = 13.756331, 100.501765
+
+# DC capacity
+DC_KWP = 136.8
+DC_KWP2 = 136.80
+DC_WP = 136,800
+
+# counts and ratings
+N_MODULES = 240
+N_INVERTERS = 1
+N_STRINGS = 15
+MODULE_WP = 570
+INV_KW = 125
+MODULES_PER_STRING = 16
+
+# engineers (title block)
+ENG_STR_NAME = (ชื่อวิศวกรโยธา)
+ENG_STR_LIC = สย.-----
+ENG_ELE_NAME = (ชื่อวิศวกรไฟฟ้า)
+ENG_ELE_LIC = สฟก.-----
+
+# drawing number, same pattern as the template (PEA-EMD-##-####)
+DRAWING_NO = PEA-EMD-07-2025

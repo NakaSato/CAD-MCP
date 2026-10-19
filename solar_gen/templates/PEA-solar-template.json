@@ -1,0 +1,299 @@
+{
+ "entries": [
+  {
+   "handle": "1947E2",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FD09C",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ไดอะแกรมเส้นเดียวของสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ไดอะแกรมเส้นเดียวของ{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FD0FD",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FD104",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FE2B7",
+   "type": "MTEXT",
+   "where": "model",
+   "original": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P}\\P136.80 \tkWp\\P\\P240\t\tMODULES\\P15 \t\tSTRINGS\\P\\P570\t\tWp\\P\\P16/15\t\tPCS/STRING",
+   "template": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P}\\P{{DC_KWP2}} \tkWp\\P\\P{{N_MODULES}}\t\tMODULES\\P{{N_STRINGS}} \t\tSTRINGS\\P\\P{{MODULE_WP}}\t\tWp\\P\\P{{MODULES_PER_STRING}}\t\tPCS/STRING"
+  },
+  {
+   "handle": "1FF3C1",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FF3CA",
+   "type": "ATTRIB",
+   "where": "attrib",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FF6DE",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ไดอะแกรมเส้นเดียวของสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ไดอะแกรมเส้นเดียวของ{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FF6F3",
+   "type": "ATTRIB",
+   "where": "attrib",
+   "original": "ไดอะแกรมเส้นเดียวของสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ไดอะแกรมเส้นเดียวของ{{SITE_NAME}}"
+  },
+  {
+   "handle": "1FF743",
+   "type": "TEXT",
+   "where": "model",
+   "original": "LOCATION ( LAT / LONG )  :  16.557424, 99.506055",
+   "template": "LOCATION ( LAT / LONG )  :  {{GPS}}"
+  },
+  {
+   "handle": "1FF745",
+   "type": "MTEXT",
+   "where": "model",
+   "original": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}136.8  \t\tkWp\\P\\P240\t\t\tMODULES\\P1\t\t\tSETS\\P15\t\t\tSTRINGS\\P\\P570\t\t\tWp\\P125\t\t\tkWac\\P\\P16/15\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t",
+   "template": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}{{DC_KWP}}  \t\tkWp\\P\\P{{N_MODULES}}\t\t\tMODULES\\P{{N_INVERTERS}}\t\t\tSETS\\P{{N_STRINGS}}\t\t\tSTRINGS\\P\\P{{MODULE_WP}}\t\t\tWp\\P{{INV_KW}}\t\t\tkWac\\P\\P{{MODULES_PER_STRING}}\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t"
+  },
+  {
+   "handle": "1FF746",
+   "type": "TEXT",
+   "where": "model",
+   "original": "PROJECT : สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "PROJECT : {{SITE_NAME}}"
+  },
+  {
+   "handle": "1FFB07",
+   "type": "ATTRIB",
+   "where": "attrib",
+   "original": "ผังรวมอาคารในสถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังรวมอาคารใน{{SITE_NAME}}"
+  },
+  {
+   "handle": "202D0A",
+   "type": "TEXT",
+   "where": "model",
+   "original": "LOCATION ( LAT / LONG )  :  16.557424, 99.506055",
+   "template": "LOCATION ( LAT / LONG )  :  {{GPS}}"
+  },
+  {
+   "handle": "202D0C",
+   "type": "MTEXT",
+   "where": "model",
+   "original": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}136.8  \t\tkWp\\P\\P240\t\t\tMODULES\\P1\t\t\tSETS\\P15\t\t\tSTRINGS\\P\\P570\t\t\tWp\\P125\t\t\tkWac\\P\\P16/15\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t",
+   "template": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}{{DC_KWP}}  \t\tkWp\\P\\P{{N_MODULES}}\t\t\tMODULES\\P{{N_INVERTERS}}\t\t\tSETS\\P{{N_STRINGS}}\t\t\tSTRINGS\\P\\P{{MODULE_WP}}\t\t\tWp\\P{{INV_KW}}\t\t\tkWac\\P\\P{{MODULES_PER_STRING}}\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t"
+  },
+  {
+   "handle": "202D0D",
+   "type": "TEXT",
+   "where": "model",
+   "original": "PROJECT : สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "PROJECT : {{SITE_NAME}}"
+  },
+  {
+   "handle": "202D4A",
+   "type": "TEXT",
+   "where": "model",
+   "original": "LOCATION ( LAT / LONG )  :  16.557424, 99.506055",
+   "template": "LOCATION ( LAT / LONG )  :  {{GPS}}"
+  },
+  {
+   "handle": "202D4C",
+   "type": "MTEXT",
+   "where": "model",
+   "original": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}136.8  \t\tkWp\\P\\P240\t\t\tMODULES\\P1\t\t\tSETS\\P15\t\t\tSTRINGS\\P\\P570\t\t\tWp\\P125\t\t\tkWac\\P\\P16/15\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t",
+   "template": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}{{DC_KWP}}  \t\tkWp\\P\\P{{N_MODULES}}\t\t\tMODULES\\P{{N_INVERTERS}}\t\t\tSETS\\P{{N_STRINGS}}\t\t\tSTRINGS\\P\\P{{MODULE_WP}}\t\t\tWp\\P{{INV_KW}}\t\t\tkWac\\P\\P{{MODULES_PER_STRING}}\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t"
+  },
+  {
+   "handle": "202D4D",
+   "type": "TEXT",
+   "where": "model",
+   "original": "PROJECT : สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "PROJECT : {{SITE_NAME}}"
+  },
+  {
+   "handle": "202D8A",
+   "type": "TEXT",
+   "where": "model",
+   "original": "LOCATION ( LAT / LONG )  :  16.557424, 99.506055",
+   "template": "LOCATION ( LAT / LONG )  :  {{GPS}}"
+  },
+  {
+   "handle": "202D8C",
+   "type": "MTEXT",
+   "where": "model",
+   "original": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}136.8  \t\tkWp\\P\\P240\t\t\tMODULES\\P1\t\t\tSETS\\P15\t\t\tSTRINGS\\P\\P570\t\t\tWp\\P125\t\t\tkWac\\P\\P16/15\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t",
+   "template": "{\\fAngsanaUPC|b0|i0|c106|p0;\\P\\P}{{DC_KWP}}  \t\tkWp\\P\\P{{N_MODULES}}\t\t\tMODULES\\P{{N_INVERTERS}}\t\t\tSETS\\P{{N_STRINGS}}\t\t\tSTRINGS\\P\\P{{MODULE_WP}}\t\t\tWp\\P{{INV_KW}}\t\t\tkWac\\P\\P{{MODULES_PER_STRING}}\t\t\t{\\W0.9;\\Fcordia.shx|c0;PCS/STRING\\P}\t    \t\t"
+  },
+  {
+   "handle": "202D8D",
+   "type": "TEXT",
+   "where": "model",
+   "original": "PROJECT : สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "PROJECT : {{SITE_NAME}}"
+  },
+  {
+   "handle": "209E18",
+   "type": "TEXT",
+   "where": "model",
+   "original": "สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "{{SITE_NAME}}"
+  },
+  {
+   "handle": "209E19",
+   "type": "TEXT",
+   "where": "model",
+   "original": "กำลังการผลิตติดตั้ง 136.8 กิโลวัตต์สูงสุด",
+   "template": "กำลังการผลิตติดตั้ง {{DC_KWP}} กิโลวัตต์สูงสุด"
+  },
+  {
+   "handle": "209E1A",
+   "type": "TEXT",
+   "where": "model",
+   "original": "GPS : 16.557424, 99.506055",
+   "template": "GPS : {{GPS}}"
+  },
+  {
+   "handle": "209E23",
+   "type": "TEXT",
+   "where": "model",
+   "original": "สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "{{SITE_NAME}}"
+  },
+  {
+   "handle": "209E24",
+   "type": "TEXT",
+   "where": "model",
+   "original": "กำลังการผลิตติดตั้ง 136.8 กิโลวัตต์สูงสุด",
+   "template": "กำลังการผลิตติดตั้ง {{DC_KWP}} กิโลวัตต์สูงสุด"
+  },
+  {
+   "handle": "209E2D",
+   "type": "TEXT",
+   "where": "model",
+   "original": "สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "{{SITE_NAME}}"
+  },
+  {
+   "handle": "209E2E",
+   "type": "TEXT",
+   "where": "model",
+   "original": "กำลังการผลิตติดตั้ง 136.8 กิโลวัตต์สูงสุด",
+   "template": "กำลังการผลิตติดตั้ง {{DC_KWP}} กิโลวัตต์สูงสุด"
+  },
+  {
+   "handle": "225CE3",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังการติดตั้งระบบกันย้อนที่สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังการติดตั้งระบบกันย้อนที่{{SITE_NAME}}"
+  },
+  {
+   "handle": "22B365",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังการติดตั้งระบบกันย้อนที่สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังการติดตั้งระบบกันย้อนที่{{SITE_NAME}}"
+  },
+  {
+   "handle": "22B387",
+   "type": "TEXT",
+   "where": "model",
+   "original": "ผังการติดตั้งระบบกันย้อนที่สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร",
+   "template": "ผังการติดตั้งระบบกันย้อนที่{{SITE_NAME}}"
+  },
+  {
+   "handle": "278416",
+   "type": "TEXT",
+   "where": "model",
+   "original": "Total solar cell 240 panel",
+   "template": "Total solar cell {{N_MODULES}} panel"
+  },
+  {
+   "handle": "278463",
+   "type": "TEXT",
+   "where": "model",
+   "original": "Total power 136,800Wp",
+   "template": "Total power {{DC_WP}}Wp"
+  },
+  {
+   "handle": "22E358",
+   "type": "MTEXT",
+   "where": "title block",
+   "original": "สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร\\Pต.หนองปลิง อ.เมืองกำแพงเพชร จ.กําแพงเพรช 62000",
+   "template": "{{SITE_NAME}}\\P{{SITE_ADDRESS}}"
+  },
+  {
+   "handle": "22E36E",
+   "type": "TEXT",
+   "where": "title block",
+   "original": "สย.13072",
+   "template": "{{ENG_STR_LIC}}"
+  },
+  {
+   "handle": "22E36F",
+   "type": "TEXT",
+   "where": "title block",
+   "original": "สฟก.5409",
+   "template": "{{ENG_ELE_LIC}}"
+  },
+  {
+   "handle": "22E370",
+   "type": "TEXT",
+   "where": "title block",
+   "original": "นายปิยะพงษ์ พุทธิคุณ",
+   "template": "{{ENG_ELE_NAME}}"
+  },
+  {
+   "handle": "22E371",
+   "type": "TEXT",
+   "where": "title block",
+   "original": "นายเอกพงษ์ คำสิงห์นอก ",
+   "template": "{{ENG_STR_NAME}}"
+  }
+ ],
+ "drawing_no": {
+  "handles": [
+   "22E348",
+   "22E349",
+   "22E34A",
+   "22E34B",
+   "22E34C",
+   "22E34D",
+   "22E34E",
+   "22E34F",
+   "22E350",
+   "22E351",
+   "22E352",
+   "22E353",
+   "22E354",
+   "22E355",
+   "22E356"
+  ],
+  "original": "PEA-EMD-03-2024",
+  "template": "PEA-EMD-##-####"
+ },
+ "source": "1 สถานีผลิตน้ำศูนย์ราชการ 280826.dwg"
+}

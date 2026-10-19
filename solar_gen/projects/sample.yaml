@@ -1,0 +1,114 @@
+# Sample project (fictional data, modelled on the example PWA water-station set).
+# Copy this file for a real job and replace the values. Lengths in mm unless noted.
+
+template_dwg: ../../example/1 สถานีผลิตน้ำศูนย์ราชการ 280826.dwg   # relative to this file
+fonts_dir: ../../example/font            # SHX fonts (cordia.shx ...) for plotting; copied next to the DXF
+output_name: SAMPLE-WTP
+
+project:
+  programme:
+    - โครงการจัดการพลังงานไฟฟ้าจากระบบผลิตไฟฟ้าพลังงานแสงอาทิตย์ที่ติดตั้งบนหลังคา
+    - (Solar Rooftop) การประปาส่วนภูมิภาค
+  name: สถานีผลิตน้ำตัวอย่าง การประปาส่วนภูมิภาคสาขาตัวอย่าง
+  address: ต.ตัวอย่าง อ.เมืองตัวอย่าง จ.ตัวอย่าง 10000
+  owner: การประปาส่วนภูมิภาค
+  owner_address: เลขที่ 72 ซอยแจ้งวัฒนะ 1 ถนนแจ้งวัฒนะ  แขวงตลาดบางเขน เขตหลักสี่  กรุงเทพฯ 10210
+  gps: [16.557424, 99.506055]
+  drawing_no: PEA-EMD-07-2025     # must stay 15 characters to fit the title-block boxes
+  revision: 0
+
+engineers:
+  structural: {name: "(ชื่อวิศวกรโยธา)", licence: "สย.-----"}
+  electrical: {name: "(ชื่อวิศวกรไฟฟ้า)", licence: "สฟก.-----"}
+
+panel:
+  brand: ZNSHINE
+  model: ZXM7-UHLD144 Series
+  type: N-TYPE MONOCRYSTALLINE
+  pmax: 570        # W
+  vmp: 42.40
+  imp: 13.45
+  voc: 51.00
+  isc: 14.18
+  width: 1134
+  length: 2279
+  thickness: 30
+  weight: 31.5     # kg
+
+inverter:
+  brand: Growatt
+  model: MAX 125KTL3-X LV
+  count: 1
+  pac_kw: 125
+  sac_kva: 137.5
+  vdc_max: 1100
+  mppt_min: 180
+  mppt_max: 1000
+  mppt_count: 10
+  strings_per_mppt: 2
+  imax_mppt: 32
+  ac_voltage: DEFAULT 3W+N+PE; 400 V
+  iac_max: 198.5
+  power_factor: 0.8leading/0.8lagging
+  frequency: 50Hz / 60Hz
+  rating_text: 125kW 3Phase 400/230V
+  dc_switch_groups: [[1, 6], [7, 13], [14, 20]]   # inverter inputs behind each DC switch
+
+design:
+  modules_per_string: 16
+  voc_factor: 1.06       # cold-temperature factor used in the PEA template
+  isc_factor: 1.50       # string fuse sizing factor
+  fuse_sizes: [15, 20, 25, 30, 32]
+  dc_ac_ratio: [0.9, 1.35]
+  fts_group: 5           # strings per firefighter switch (FTS)
+
+site_plan:
+  image: ../../example/MAPS.JPG     # drone photo, north as set below
+  metres_per_pixel: 0.05703         # measured from the example: tank roof 40 m = 701 px
+  north_deg: 180                    # direction of north on the sheet (90 = up, 180 = left)
+  equipment:                        # px = [x, y] in photo pixels from the top-left corner
+    - {type: METER, label: PEA METER, px: [1930, 610]}
+    - {type: ZERO, label: ZERO EXPORT MV, px: [2075, 610]}
+    - {type: TR, label: TR 1, note: 500kVA, px: [1985, 880]}
+    - {type: MDB, label: MDB 1, note: 630AT, px: [1985, 1420]}
+    - {type: INV, label: INV, px: [1655, 1450]}
+    - {type: WEATHER, label: WEATHER STATION, px: [760, 1390]}
+
+roofs:
+  - name: หลังคาถังน้ำใส 1
+    roof_type: พื้นคอนกรีต หลังคาถังน้ำใส
+    height_m: 4
+    slope_deg: 0
+    width: 40000         # along x on the sheet
+    depth: 26000
+    setback: 1000        # clear edge all round
+    racks: vertical      # racks run up the sheet, landscape panels, like the example
+    orientation: landscape
+    panels: 160
+    walkway: {every_rows: 2, width: 1000}   # walkway after every 2 panel columns
+    site: {px: [905, 1505]}          # top-left corner of the roof on the photo
+    features:            # positions in mm from the roof's lower-left corner
+      - {type: VENT, at: [2100, 24500]}
+      - {type: VENT, at: [2100, 1500]}
+      - {type: VENT, at: [36600, 13000]}
+      - {type: VENT, at: [36600, 10700]}
+      - {type: HATCH, at: [16500, 25400]}
+      - {type: HATCH, at: [16500, 600]}
+      - {type: INV, at: [31500, 1200], w: 6000, h: 2500}
+      - {type: FTS, at: [32300, 12200], label: SOLAR FTS-DB-01 / FTS01-03}
+      - {type: RACEWAY, path: [[34500, 3700], [34500, 12200], [8400, 12200]]}
+      - {type: WATER, path: [[40000, 19800], [8400, 19800]], taps: [[14430, 19800], [25590, 19800]]}
+      - {type: WEATHER, at: [37200, 7600]}
+  - name: หลังคาอาคารสูบน้ำ
+    width: 21700
+    depth: 14250
+    setback: 600
+    orientation: portrait
+    panels: 80
+    walkway: {every_rows: 2, width: 800}
+    site: {px: [2456, 1110]}
+    roof_type: หลังคาเมทัลชีท อาคารสูบน้ำ
+    height_m: 6
+    slope_deg: 5
+    features:
+      - {type: LADDER, at: [21000, 700]}

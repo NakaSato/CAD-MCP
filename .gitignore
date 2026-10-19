@@ -24,3 +24,13 @@ _integration_test.py
 # IDE
 .idea/
 .vscode/
+
+# solar_gen: generated output, template cache, client drawings
+solar_gen/out/
+solar_gen/.cache/
+example/
+solar_gen/templates/*.dwg
+solar_gen/templates/*.bak
+*.dwl
+*.dwl2
+.DS_Store

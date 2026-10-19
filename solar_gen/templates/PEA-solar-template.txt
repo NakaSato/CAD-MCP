@@ -1,0 +1,60 @@
+# PEA solar-rooftop template - project values
+# Template: PEA-solar-template.dwg  (made from: 1 สถานีผลิตน้ำศูนย์ราชการ 280826.dwg)
+# Copy this file for a project, edit the values, then run:
+#   uv run solar_gen/fill_template.py <this-file>
+# Format: KEY = value   (one per line, UTF-8, Thai OK, # starts a comment)
+# Values below are the example project's, as found in the template source.
+
+TEMPLATE = PEA-solar-template.dwg
+OUTPUT_NAME = NEW-PROJECT
+
+# ชื่อสถานที่/โครงการ (site name) - appears in sheet titles, title block, cover
+SITE_NAME = สถานีผลิตน้ำศูนย์ราชการ การประปาส่วนภูมิภาคสาขากำแพงเพชร
+
+# ที่อยู่ (address line under the project name in the title block)
+SITE_ADDRESS = ต.หนองปลิง อ.เมืองกำแพงเพชร จ.กําแพงเพรช 62000
+
+# LAT, LONG
+GPS = 16.557424, 99.506055
+
+# DC capacity, 1 decimal (kWp)
+DC_KWP = 136.8
+
+# DC capacity, 2 decimals (kWp)
+DC_KWP2 = 136.80
+
+# DC capacity in Wp with thousands separator
+DC_WP = 136,800
+
+# number of PV modules
+N_MODULES = 240
+
+# number of inverters
+N_INVERTERS = 1
+
+# number of strings
+N_STRINGS = 15
+
+# module power (Wp)
+MODULE_WP = 570
+
+# inverter AC power (kW)
+INV_KW = 125
+
+# modules per string, e.g. 16 or 16/15
+MODULES_PER_STRING = 16/15
+
+# structural engineer name
+ENG_STR_NAME = นายเอกพงษ์ คำสิงห์นอก
+
+# structural engineer licence no.
+ENG_STR_LIC = สย.13072
+
+# electrical engineer name
+ENG_ELE_NAME = นายปิยะพงษ์ พุทธิคุณ
+
+# electrical engineer licence no.
+ENG_ELE_LIC = สฟก.5409
+
+# drawing number, same pattern as the template
+DRAWING_NO = PEA-EMD-03-2024
